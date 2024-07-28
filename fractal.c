@@ -47,6 +47,7 @@ FractalImageBitMap render_fractal(Mandelbrotset object) {
     return bitmap;
 }
 
+
 void save_fractal(Mandelbrotset object, FractalImageBitMap bitmap, const char* filename) {
     FILE *file = fopen(filename, "wb");
     if (!file) {
@@ -54,16 +55,28 @@ void save_fractal(Mandelbrotset object, FractalImageBitMap bitmap, const char* f
         return;
     }
 
-    // Write the header for a PGM file (P5 format)
-    fprintf(file, "P5\n%zu %zu\n255\n", object.width, object.height);
+    // Write the header for a PPM file (P6 format). This way we can create images with color 😎
+    fprintf(file, "P6\n%zu %zu\n255\n", object.width, object.height);
 
     for (size_t i = 0; i < object.width * object.height; i++) {
         double num_of_iterations = bitmap[i];
-        unsigned char color = (unsigned char)(255 * num_of_iterations / object.max_iter);
+        unsigned char color[3];
 
-        // fprintf(file, "%c", color);
-        fwrite(&color, sizeof(unsigned char), 1, file);
+        if (num_of_iterations == object.max_iter) {
+            color[0] = 0; // Red
+            color[1] = 0; // Green
+            color[2] = 0; // Blue
+        } else {
+            // Apply a color gradient. Here to learn more about: https://dev.to/ndesmic/linear-color-gradients-from-scratch-1a0e
+            double t = num_of_iterations / object.max_iter;
+            color[0] = (unsigned char)(9 * (1 - t) * t * t * t * 255); // Red
+            color[1] = (unsigned char)(15 * (1 - t) * (1 - t) * t * t * 255); // Green
+            color[2] = (unsigned char)(8.5 * (1 - t) * (1 - t) * (1 - t) * t * 255); // Blue
+        }
+
+        fwrite(color, sizeof(unsigned char), 3, file);
     }
 
     fclose(file);
 }
+
