@@ -20,4 +20,9 @@ Para rodar o programa é simples, basta passar como argumento: A largura da imag
 Logo após rodar isso, o programa vai perguntar o nome da imagem onde o fractal será salvo
 
 O resultado do comando acima está aqui:
-![](result.ppm)
+
+![result](https://github.com/user-attachments/assets/0a0ff0dd-41c8-4119-853f-636cc07eed1f)
+
+O arquivo gerado é do tipo PPM (extensão `.ppm`). A maioria dos sistemas não deve ter dificuldade em abrir esse tipo de imagem.
+
+Para aprender mais sobre esse formato `portable pixmap format`, [veja aqui](https://en.wikipedia.org/wiki/Netpbm)
